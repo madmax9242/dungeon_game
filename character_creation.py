@@ -24,14 +24,14 @@ def history_gen():
 	history3 = funFact[random.randint(0,len(funFact)-1)]
 	return history1 + ("\n") + ("\n") + history2 + ("\n") + ("\n") + history3 + ("\n") + ("\n")
 
-def modifier(mod):
+def modifier(m):
 	total = 0
-	for i in range(n):
+	for i in range(m):
 		character_stat = random.randint(1,6)
 		total += character_stat
 	return total
 
-def player_gen():
+def player_gen(mod, enemyFlag = False):
 	player = {}
 	player['name'] = name_gen()
 	player['history'] = history_gen()
@@ -46,21 +46,23 @@ def player_gen():
 
 def character_creation():
 	"""The main function for this Player Generation program"""
-    userInput = ""
-    while True:
-            player = playerGen(5)# Putting the 5 in here sets both the mod and n variables as 5
-            print (player['name'])
-            print ("\n")
-            print (player['history'])
-            print ("Attack: " +  str(player['attack']))
-            print ("Defense: " + str(player['defense']))
-            print ("Health: " + str(player['health']))
-            print ("\n")
-            userInput = input("Do you like this character?  Press Enter to generate a new character.  Type \"Y\" to accept your character. Ready to continue?: ")
-            os.system('clear')
-            if userInput == "Y" or userInput == "y":
-                break
-            #print("________________________")
-            print("\n")
-        
-    return player
+	userInput = ""
+	while True:
+		player = player_gen(5)# Putting the 5 in here sets both the mod and n variables as 5
+		print (player['name'])
+		print ("\n")
+		print (player['history'])
+		print ("Attack: " +  str(player['attack']))
+		print ("Defense: " + str(player['defense']))
+		print ("Health: " + str(player['health']))
+		print ("\n")
+		userInput = input("Do you like this character?  Press Enter to generate a new character.  Type \"Y\" to accept your character. Ready to continue?: ")
+		os.system('clear')
+		if userInput == "Y" or userInput == "y":
+		    break
+		#print("________________________")
+		print("\n")
+
+	return player
+
+character_creation()
