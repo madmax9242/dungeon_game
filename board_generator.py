@@ -5,6 +5,7 @@ print("Welcome to Monty Python's Artifact Hunt. You will be asked to determine w
 input()
 userHeight = int(input("How tall should the board be?"))
 userWidth = int(input("How wide should the board be?"))
+print('\n')
 
 def create_board():
 	board = []

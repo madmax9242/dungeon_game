@@ -44,7 +44,7 @@ def player_gen(mod, enemyFlag = False):
 	player['quit'] = False
 	return player 
 
-def character_creation():
+def create_character():
 	"""The main function for this Player Generation program"""
 	userInput = ""
 	while True:
@@ -65,4 +65,4 @@ def character_creation():
 
 	return player
 
-character_creation()
+
