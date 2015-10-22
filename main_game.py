@@ -21,6 +21,20 @@ def player_movement(board, player):
 				board[player['x']][player['y']] ="@"
 			else:
 				print('You have fallen into the abyss. Respawning...')
+		elif user_input == "A":
+			if player ['y'] > 0:
+				board[player['x']][player['y']] = "*"
+				player['y'] -= 1 
+				board[player['x']][player['y']] = "@"
+			else:
+				print("You have fallen into the abyss. Respawning...")
+		elif user_input == 'D':
+			if player['y'] < (len(board[0]) - 1):
+				board[player['x']][player['y']] = "*"
+				player['y'] += 1
+				board[player['x']][player['y']] = "@"
+			else:
+				print ("You have fallen into the abyss. Respawning...")
 
 def main():
 	player = create_character()
