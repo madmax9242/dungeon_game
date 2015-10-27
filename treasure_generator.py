@@ -2,8 +2,9 @@ import random
 from board_generator import *
 
 treasure = {}
-treasure_list = {}
-minor_treasure_list = {}
+treasure_list = []
+# minor_treasure_list = {}
+minor_treasure = {}
 
 def treasure_name():
 	treasure_list = ["The Holy Hand Grenade of Antioch","A SHRUBBERY!","Camelot. It is a silly place.", "A Farm Animal Catapult", "An Insult Spewing Frenchman", "A Large Wooden Rabbit", "The Staff of Tim", "Brave Sir Robin's Minstrels"]
@@ -20,10 +21,11 @@ def treasure_creator():
 def check_treasure(treasure, player, treasure_list):
 	found_treasure = False
 	if treasure['x'] == player['x'] and treasure['y'] == player['y']:
-		print("You have found " + (treasure['name']) + ". Press Enter to continue the journey.")
+		treasure_list.append(treasure['name'])
+		print("You have found %s. Press Enter to continue the journey." % (treasure['name']))
 		input()
 		found_treasure = True 
-		return found_treasure
+		return treasure_list
 
 def minor_treasure_creator():
 	minor_treasure_list = ["a Beer. You gain 5 health", "a Really Sharp Stick. You gain 4 attack", "a Pointy Hat. You gain 3 defense"]
@@ -37,5 +39,7 @@ def stat_adjuster(player, minor_treasure):
 		player['attack'] += 3
 	elif minor_treasure['name'] == "a Pointy Hat. You gain 3 defense":
 		player['defense'] += 3
+	print("You have found %s. Your health is %s, your attack is %s, and your defense is %s" % (minor_treasure['name'], player['health'], player['attack'], player['defense']))
+	input()
 	return player
 
