@@ -23,5 +23,5 @@ def show_board(board):
 def player_location(board, player):
 	player['x'] = random.randint(0, (len(board[0])) - 1)
 	player['y'] = random.randint(0, (len(board)) - 1)
-	board[player['x']][player['y']] = "@"
+	board[player['y']][player['x']] = "@"
 	return board, player
