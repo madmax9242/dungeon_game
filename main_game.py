@@ -2,9 +2,9 @@ from character_creation import *
 from board_generator import *
 from treasure_generator import *
 
-def player_movement(board, player):
+def player_movement(board, player, treasure, treasure_list):
 	user_input = ""
-	while user_input not in ["W", "S", "A", "D", "P"]:
+	while user_input not in ["W", "S", "A", "D", "P", "F"]:
 		user_input = input("Move your character using W, S, A, or D. W moves the character up. D moves the character to the right. And so on. Press P to quit.").upper()
 		if user_input == 'P':
 			player['quit'] = True
@@ -36,7 +36,9 @@ def player_movement(board, player):
 				board[player['x']][player['y']] = "@"
 			else:
 				print ("You have fallen into the abyss. Respawning...")
-	return board, player 
+		elif user_input == "F":
+			print("So far you have found %s." % (", ".join(treasure_list)))
+	return board, player, treasure, treasure_list
 
 def combat(enemy, player):
 	player_attack = random.randint(0, player['attack'])
@@ -57,12 +59,51 @@ def combat(enemy, player):
 	return player, enemy 
 
 def main():
+	treasure_archive = []
 	player = create_character()
 	board = create_board()
 	player_location(board, player)
-	show_board(board)
-	for i in range(6):
-		player_movement(board, player)
-		show_board(board)
+	treasure_name()
+	treasure_creator()
+	treasure_location(treasure, board)
+
+	while True:
+		if len(treasure_list) == 7:
+			print("Congratulations. You have found all of the major treasures. Thanks for playing.")
+			input()
+			break
+		else:
+			os.system('clear')
+			show_board(board)
+			board, player = player_movement(board, player, treasure, treasure_list)
+			if player['quit'] == True:
+				break
+
+			if check_treasure(treasure, player, treasure_list) == True:
+				treasure_creator()
+				treasure_location(treasure, board)
+
+			else:
+				encounter_chance = random.randint(1,6)
+				if encounter_chance == 6:
+					minor_treasure_generator()
+					stat_adjuster(player, minor_treasure)
+				elif encounter_chance == 1:
+					enemy = create_character(len(treasure_list), True)
+					print('You have encountered %s. It has %s health points. Prepare for battle' % (enemy['name'], enemy['health']))
+					input()
+					while enemy['health'] > 0 and player['health'] > 0:
+						os.system('clear')
+						combat(enemy, player)
+						input()
+						elif enemy['health'] <= 0:
+							print('You are victorious. Press Enter to continue your quest.')
+							input()
+					if player['health'] <= 0:
+						print('Game Over. You died.')
+						input()
+						break
+
+	
 
 main()
