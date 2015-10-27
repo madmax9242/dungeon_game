@@ -27,9 +27,15 @@ def check_treasure(treasure, player, treasure_list):
 
 def minor_treasure_creator():
 	minor_treasure_list = ["a Beer. You gain 5 health", "a Really Sharp Stick. You gain 4 attack", "a Pointy Hat. You gain 3 defense"]
-	minor_treasure['name'] = minor_treasure_list[random.randint(0, len(minor_treasure_list) - 1)]
+	minor_treasure['name'] = minor_treasure_list[random.randint(0, len(minor_treasure_list) - 1)] 
 	return minor_treasure
 
 def stat_adjuster(player, minor_treasure):
-	if 
+	if minor_treasure['name'] == "a Beer. You gain 5 health":
+		player['health'] += 5
+	elif minor_treasure['name'] == 'a Really Pointy Stick. You gain 3 attack':
+		player['attack'] += 3
+	elif minor_treasure['name'] == "a Pointy Hat. You gain 3 defense":
+		player['defense'] += 3
+	return player
 
