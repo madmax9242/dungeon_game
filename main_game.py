@@ -36,6 +36,25 @@ def player_movement(board, player):
 				board[player['x']][player['y']] = "@"
 			else:
 				print ("You have fallen into the abyss. Respawning...")
+	return board, player 
+
+def combat(enemy, player):
+	player_attack = random.randint(0, player['attack'])
+	player_defense = random.randint(0, player['defense'])
+	enemy_attack = random.randint(0, enemy['attack'])
+	enemy_defense = random.randint(0, enemy['defense'])
+	player_damage = player_attack - enemy_defense
+	enemy_damage = enemy_attack - player_defense
+	if player_damage > 0:
+		enemy['health'] -= player_damage
+		print("%s hits for %s. The enemy's health is now %s" % (player['name'], player_damage, enemy['health']))
+	else:
+		print("%s misses" % (player['name']))
+	if enemy_damage > 0:
+		print("%s hits for %s. The player's health is now %s" % (enemy['name'], enemy_damage, player['name']))
+	else:
+		print("%s misses" % (enemy['name']))
+	return player, enemy 
 
 def main():
 	player = create_character()
