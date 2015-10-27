@@ -1,5 +1,6 @@
 from character_creation import *
 from board_generator import *
+from treasure_generator import *
 
 def player_movement(board, player):
 	user_input = ""
