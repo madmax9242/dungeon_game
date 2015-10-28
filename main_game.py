@@ -3,6 +3,7 @@ from board_generator import *
 from treasure_generator import *
 
 import random
+import os
 
 def player_movement(board, player, treasure_list):
 	user_input = ""
@@ -57,7 +58,9 @@ def combat(enemy, player):
 		print("%s hits for %s. The enemy's health is now %s" % (player['name'], player_damage, enemy['health']))
 	else:
 		print("%s misses" % (player['name']))
-	if enemy_damage > 0:
+	if enemy_damage > 0 and e_crit == 1:
+		player['health'] -= (enemy_damage * 2)
+	elif enemy_damage > 0:
 		player['health'] -= enemy_damage
 		print("%s hits for %s. The player's health is now %s" % (enemy['name'], enemy_damage, player['health']))
 	else:
@@ -71,9 +74,19 @@ def is_critical(player):
 	else:
 		return False
 
+def enemy_crit(e_crit):
+	enemy_ability = input("Do you want to give enemies the ability to get critical hits? Y/N   ")
+	if enemy_ability.upper() == 'Y':
+		e_crit = 1
+		return True, e_crit
+	else:
+		return False
+
 def main():
+	e_crit = 0
 	treasure_list = []
 	player = create_character()
+	enemy_crit(e_crit)
 	board = create_board()
 	player_location(board, player)
 	treasure_name()
@@ -105,6 +118,8 @@ def main():
 					stat_adjuster(player, minor_treasure)
 				elif encounter_chance == 1:
 					enemy = player_gen(len(treasure_list), True)
+					if e_crit == 1:
+						enemy['crit_chance'] = 5
 					print('You have encountered %s. It has %s health points. Prepare for battle' % (enemy['name'], enemy['health']))
 					input()
 					while enemy['health'] > 0 and player['health'] > 0:
