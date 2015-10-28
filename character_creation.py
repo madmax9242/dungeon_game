@@ -41,6 +41,7 @@ def player_gen(mod, enemyFlag = False):
 	player['attack'] = (random.randint(3,18) + modifier(mod))
 	player['defense'] = (random.randint(3,18) + modifier(mod))
 	player['health'] = (random.randint(5,30) + modifier(mod))
+	player['crit_chance'] = 0
 	player['quit'] = False
 	return player 
 

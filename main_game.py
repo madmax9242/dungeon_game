@@ -2,6 +2,8 @@ from character_creation import *
 from board_generator import *
 from treasure_generator import *
 
+import random
+
 def player_movement(board, player, treasure_list):
 	user_input = ""
 	while user_input not in ["W", "S", "A", "D", "P", "F"]:
@@ -47,23 +49,33 @@ def combat(enemy, player):
 	enemy_defense = random.randint(0, enemy['defense'])
 	player_damage = player_attack - enemy_defense
 	enemy_damage = enemy_attack - player_defense
-	if player_damage > 0:
-		enemy['health'] -= player_damage
+	if player_damage > 0 and is_critical(player):
+		enemy['health'] -= (player_damage * 2) 
+		print("Critical Hit! %s hits for %s. The enemy's health is now %s" % (player['name'], (player_damage * 2), enemy['health']))
+	elif player_damage > 0:
+		enemy['health'] -= player_damage 
 		print("%s hits for %s. The enemy's health is now %s" % (player['name'], player_damage, enemy['health']))
 	else:
 		print("%s misses" % (player['name']))
 	if enemy_damage > 0:
+		player['health'] -= enemy_damage
 		print("%s hits for %s. The player's health is now %s" % (enemy['name'], enemy_damage, player['health']))
 	else:
 		print("%s misses" % (enemy['name']))
-	return player, enemy 
+	return player, enemy
+
+def is_critical(player):
+	chance = random.randint(1,101)
+	if chance <= player['crit_chance']:
+		return True
+	else:
+		return False
 
 def main():
-	treasure_archive = []
+	treasure_list = []
 	player = create_character()
 	board = create_board()
 	player_location(board, player)
-	show_board(board)
 	treasure_name()
 	treasure_creator()
 	treasure_location(treasure, board)
@@ -76,8 +88,9 @@ def main():
 			break
 		else:
 			os.system('clear')			
-			board, player = player_movement(board, player, treasure_list)
 			show_board(board)
+			board, player = player_movement(board, player, treasure_list)
+			print("showing movement")
 			if player['quit'] == True:
 				break
 
@@ -90,7 +103,6 @@ def main():
 				if encounter_chance == 6:
 					minor_treasure_creator()
 					stat_adjuster(player, minor_treasure)
-					show_board(board)
 				elif encounter_chance == 1:
 					enemy = player_gen(len(treasure_list), True)
 					print('You have encountered %s. It has %s health points. Prepare for battle' % (enemy['name'], enemy['health']))
