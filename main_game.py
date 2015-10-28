@@ -2,7 +2,7 @@ from character_creation import *
 from board_generator import *
 from treasure_generator import *
 
-def player_movement(board, player, treasure, treasure_list):
+def player_movement(board, player, treasure_list):
 	user_input = ""
 	while user_input not in ["W", "S", "A", "D", "P", "F"]:
 		user_input = input("Move your character using W, S, A, or D. W moves the character up. D moves the character to the right. And so on. Press P to quit.").upper()
@@ -38,7 +38,7 @@ def player_movement(board, player, treasure, treasure_list):
 				print ("You have fallen into the abyss. Respawning...")
 		elif user_input == "F":
 			print("So far you have found %s." % (", ".join(treasure_list)))
-	return board, player, treasure, treasure_list
+	return board, player
 
 def combat(enemy, player):
 	player_attack = random.randint(0, player['attack'])
@@ -53,7 +53,7 @@ def combat(enemy, player):
 	else:
 		print("%s misses" % (player['name']))
 	if enemy_damage > 0:
-		print("%s hits for %s. The player's health is now %s" % (enemy['name'], enemy_damage, player['name']))
+		print("%s hits for %s. The player's health is now %s" % (enemy['name'], enemy_damage, player['health']))
 	else:
 		print("%s misses" % (enemy['name']))
 	return player, enemy 
@@ -63,6 +63,7 @@ def main():
 	player = create_character()
 	board = create_board()
 	player_location(board, player)
+	show_board(board)
 	treasure_name()
 	treasure_creator()
 	treasure_location(treasure, board)
@@ -71,11 +72,12 @@ def main():
 		if len(treasure_list) == 7:
 			print("Congratulations. You have found all of the major treasures. Thanks for playing.")
 			input()
+			
 			break
 		else:
-			os.system('clear')
+			os.system('clear')			
+			board, player = player_movement(board, player, treasure_list)
 			show_board(board)
-			board, player = player_movement(board, player, treasure, treasure_list)
 			if player['quit'] == True:
 				break
 
@@ -86,17 +88,18 @@ def main():
 			else:
 				encounter_chance = random.randint(1,6)
 				if encounter_chance == 6:
-					minor_treasure_generator()
+					minor_treasure_creator()
 					stat_adjuster(player, minor_treasure)
+					show_board(board)
 				elif encounter_chance == 1:
-					enemy = create_character(len(treasure_list), True)
+					enemy = player_gen(len(treasure_list), True)
 					print('You have encountered %s. It has %s health points. Prepare for battle' % (enemy['name'], enemy['health']))
 					input()
 					while enemy['health'] > 0 and player['health'] > 0:
 						os.system('clear')
 						combat(enemy, player)
 						input()
-						elif enemy['health'] <= 0:
+						if enemy['health'] <= 0:
 							print('You are victorious. Press Enter to continue your quest.')
 							input()
 					if player['health'] <= 0:
